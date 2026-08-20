@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saemil Studio</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-mark" viewBox="0 0 32 32"><path d="M25 6H12Q6 6 6 12Q6 17 13 17H19Q26 17 26 23Q26 28 20 28H6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="25" cy="6" r="3" fill="currentColor"/><circle cx="6" cy="28" r="3" fill="currentColor"/></symbol>
+  <symbol id="i-draw" viewBox="0 0 24 24"><path d="M4 9V4H9M15 4H20V9M20 15V20H15M9 20H4V15M9 12H15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-names" viewBox="0 0 24 24"><path d="M4 6H20M12 6V20M8 20H16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-table" viewBox="0 0 24 24"><path d="M4 4H20V20H4ZM4 10H20M10 4V20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12H19M13 6L19 12L13 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7H20M4 12H20M4 17H20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="app">
+  <nav id="sidebar" class="sidebar" aria-label="Sessions">
+    <div class="brand">
+      <svg class="mark" aria-hidden="true"><use href="#i-mark"/></svg>
+      <span class="brand-name">saemil</span>
+    </div>
+    <p class="caption muted">STUDIO / NUMPY</p>
+    <button type="button" id="new-session" class="btn secondary block">+ New session</button>
+    <h2 class="caption muted sessions-label">SESSIONS</h2>
+    <ul id="history" class="history"></ul>
+    <p id="history-note" class="small muted" hidden></p>
+    <button type="button" id="clear-history" class="btn quiet">Clear history</button>
+    <div class="side-foot">
+      <p class="label">One engine. Three tasks.</p>
+      <p class="small muted">NumPy · CPU only<br>Offline template enabled</p>
+    </div>
+  </nav>
+
+  <div class="main-col" id="main-col">
+    <header class="topbar">
+      <button type="button" id="menu" class="menu-btn" aria-label="Open sessions" aria-controls="sidebar" aria-expanded="false">
+        <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+      </button>
+      <div class="engine">
+        <p class="engine-name">Saemil Engine</p>
+        <p class="small muted">v1.0 / NumPy</p>
+      </div>
+      <ul class="badges" aria-label="Model readiness">
+        <li id="badge-vision" class="badge example">Vision: Checking…</li>
+        <li id="badge-names" class="badge example">Names: Checking…</li>
+        <li id="badge-tabular" class="badge example">Tabular: Checking…</li>
+      </ul>
+    </header>
+
+    <main id="stream" class="stream">
+      <div id="status-notice"></div>
+      <!-- 01 session-empty -->
+      <section class="view" data-view="tasks" aria-labelledby="h-tasks">
+        <p class="eyebrow">NEW SESSION</p>
+        <h1 id="h-tasks" class="display" tabindex="-1">What would you like to try?</h1>
+        <p class="lede">Three small models, built on the same NumPy engine. Choose a task to start.</p>
+        <ul class="task-rows">
+          <li><button type="button" class="task-row" data-go="vision" disabled>
+            <svg class="icon accent" aria-hidden="true"><use href="#i-draw"/></svg>
+            <span><span class="heading">Recognize a digit</span><span class="task-desc">Draw a number from 0 to 9.<br>The vision head returns its top guesses.</span></span>
+            <svg class="icon muted arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
+          <li><button type="button" class="task-row" data-go="names" disabled>
+            <svg class="icon accent" aria-hidden="true"><use href="#i-names"/></svg>
+            <span><span class="heading">Generate name ideas</span><span class="task-desc">Set a count, temperature, and seed.<br>The character model samples candidates.</span></span>
+            <svg class="icon muted arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
+          <li><button type="button" class="task-row" data-go="tabular" disabled>
+            <svg class="icon accent" aria-hidden="true"><use href="#i-table"/></svg>
+            <span><span class="heading">Explore a shopping session</span><span class="task-desc">Adjust six session features.<br>See the estimated purchase probability.</span></span>
+            <svg class="icon muted arrow" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
+        </ul>
+        <p class="note muted">Predictions work offline. Explanations use Offline Template by default.</p>
+      </section>
+
+      <!-- 03/04 vision editor -->
+      <section class="view" data-view="vision" aria-labelledby="h-vision" hidden>
+        <p class="eyebrow">VISION / 01</p>
+        <h1 id="h-vision" class="display" tabindex="-1">Draw a digit. See what it sees.</h1>
+        <p class="lede">Use a mouse, pen, or touch. Prediction runs when you finish a stroke.</p>
+        <div class="unavail-slot"></div>
+        <div class="editor">
+          <div class="panel canvas-panel">
+            <canvas id="pad" class="pad" width="280" height="280" role="img" aria-label="Drawing area, empty"></canvas>
+            <p class="small muted center">28 × 28 input / light ink on dark</p>
+            <div class="row">
+              <button type="button" id="clear-drawing" class="btn secondary">Clear drawing</button>
+            </div>
+            <div class="picker">
+              <label class="label" for="example-digit">Load example digit</label>
+              <div class="row">
+                <select id="example-digit" class="field">
+                  <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+                  <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
+                </select>
+                <button type="button" id="use-example" class="btn secondary">Use example</button>
+              </div>
+              <p class="small muted">Keyboard alternative: loads a labelled MNIST test digit and classifies it.</p>
+            </div>
+          </div>
+          <div class="output">
+            <p class="eyebrow">MODEL OUTPUT</p>
+            <div id="vision-out"></div>
+            <hr class="rule">
+            <p class="model-line">MNIST / 784 → 128 → 10<br>101,770 trainable parameters</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05/06 names editor -->
+      <section class="view" data-view="names" aria-labelledby="h-names" hidden>
+        <p class="eyebrow">NAMES / 02</p>
+        <h1 id="h-names" class="display" tabindex="-1">A few letters. A new possibility.</h1>
+        <p class="lede">A character model samples name ideas. A fixed seed repeats the same list.</p>
+        <div class="unavail-slot"></div>
+        <div class="editor">
+          <form id="names-form" class="panel form-panel" novalidate>
+            <div class="field-group">
+              <label class="label" for="n-count">Number of names</label>
+              <input id="n-count" class="field" type="number" inputmode="numeric" min="1" max="10" step="1" value="5" aria-describedby="n-count-help n-count-err">
+              <p id="n-count-help" class="small muted">Choose 1–10 candidates.</p>
+              <p id="n-count-err" class="small error-text" hidden></p>
+            </div>
+            <div class="field-group">
+              <label class="label" for="n-temp">Temperature</label>
+              <input id="n-temp" class="field" type="number" inputmode="decimal" min="0.2" max="1.5" step="0.05" value="0.85" aria-describedby="n-temp-help n-temp-err">
+              <p id="n-temp-help" class="small muted">0.2–1.5 / higher means more variation.</p>
+              <p id="n-temp-err" class="small error-text" hidden></p>
+            </div>
+            <div class="field-group">
+              <label class="label" for="n-seed">Seed (optional)</label>
+              <input id="n-seed" class="field" type="number" inputmode="numeric" min="0" step="1" aria-describedby="n-seed-help n-seed-err">
+              <p id="n-seed-help" class="small muted">Use a seed to reproduce the output.</p>
+              <p id="n-seed-err" class="small error-text" hidden></p>
+            </div>
+            <button type="submit" id="names-submit" class="btn primary block">Generate names</button>
+          </form>
+          <div class="output">
+            <p class="eyebrow">CANDIDATES</p>
+            <div id="names-out"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 tabular editor -->
+      <section class="view" data-view="tabular" aria-labelledby="h-tabular" hidden>
+        <p class="eyebrow">TABULAR / 03</p>
+        <h1 id="h-tabular" class="display" tabindex="-1">Explore a completed shopping session.</h1>
+        <p class="lede">Change a value to update the estimate. The model uses all six features below.</p>
+        <div class="unavail-slot"></div>
+        <div class="editor tabular-editor">
+          <div id="sliders" class="sliders"></div>
+          <div class="panel prob-panel">
+            <p class="caption muted">ESTIMATED PURCHASE PROBABILITY</p>
+            <div id="tabular-out"></div>
+            <hr class="rule">
+            <p class="small muted">Initial values and slider limits come from the loaded model's training data.</p>
+            <button type="button" class="btn primary block" data-go="results">View session results</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 session overview + explanation -->
+      <section class="view" data-view="results" aria-labelledby="h-results" hidden>
+        <p class="eyebrow">SESSION / THREE HEADS</p>
+        <h1 id="h-results" class="display" tabindex="-1">One engine. Three different answers.</h1>
+        <p class="lede">Each head predicts independently. The explanation brings the results together.</p>
+        <p id="run-summary" class="caption run-summary"></p>
+        <div class="saemil-row">
+          <span class="saemil-id"><svg class="mark small-mark" aria-hidden="true"><use href="#i-mark"/></svg><span class="label">Saemil</span></span>
+          <span class="caption muted">FROZEN HEAD OUTPUTS</span>
+        </div>
+        <div id="cards" class="cards"></div>
+        <section id="explanation" class="explanation" aria-label="Explanation" hidden></section>
+        <div class="row results-actions">
+          <button type="button" class="btn quiet" data-go="providers">Choose explanation provider</button>
+          <button type="button" class="btn primary mobile-only" id="new-session-bottom">New session</button>
+        </div>
+      </section>
+
+      <!-- 08 provider selection -->
+      <section class="view" data-view="providers" aria-labelledby="h-providers" hidden>
+        <p class="eyebrow">AI BRIDGE / EXPLANATION MODE</p>
+        <h1 id="h-providers" class="display" tabindex="-1">Choose how to explain the results.</h1>
+        <p class="lede">The three NumPy heads make the predictions. This setting only changes the prose.</p>
+        <fieldset class="provider-cards">
+          <legend class="sr-only">Explanation provider</legend>
+          <div id="provider-cards"></div>
+        </fieldset>
+        <p class="note muted">If a provider fails, Saemil shows the offline explanation and its fallback reason.<br>A local CLI never silently switches to a paid provider.</p>
+      </section>
+
+      <div class="toolbar" role="group" aria-label="Tasks and explanation">
+        <button type="button" class="tool" data-go="vision" disabled><svg class="icon" aria-hidden="true"><use href="#i-draw"/></svg>Draw digit</button>
+        <button type="button" class="tool" data-go="names" disabled><svg class="icon" aria-hidden="true"><use href="#i-names"/></svg>Generate names</button>
+        <button type="button" class="tool" data-go="tabular" disabled><svg class="icon" aria-hidden="true"><use href="#i-table"/></svg>Edit session</button>
+        <label class="sr-only" for="provider">Explanation provider</label>
+        <select id="provider" class="provider-select"><option value="offline:">Offline Template</option></select>
+        <button type="button" id="explain" class="btn primary" disabled>Explain results</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="sr-only" aria-live="polite" id="live-vision"></div>
+<div class="sr-only" aria-live="polite" id="live-names"></div>
+<div class="sr-only" aria-live="polite" id="live-tabular"></div>
+<div class="sr-only" aria-live="polite" id="live-explain"></div>
+
+<dialog id="confirm-clear" class="dialog" aria-labelledby="confirm-text">
+  <form method="dialog">
+    <p id="confirm-text" class="body">Delete all saved sessions from this browser? This cannot be undone.</p>
+    <div class="row end">
+      <button value="cancel" class="btn secondary">Cancel</button>
+      <button value="ok" class="btn primary">Delete history</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="/static/centering.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
