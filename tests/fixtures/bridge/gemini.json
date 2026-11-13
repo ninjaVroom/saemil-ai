@@ -1,0 +1,3 @@
+{"candidates": [{"index": 0, "content": {"role": "model", "parts": [{"text": "The drawing looks most like a 7."}, {"text": " Two name ideas are Narela and Vimo."}]},
+  "finishReason": "STOP", "safetyRatings": [{"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "probability": "NEGLIGIBLE"}]}],
+ "usageMetadata": {"promptTokenCount": 120, "candidatesTokenCount": 22, "totalTokenCount": 142}, "modelVersion": "example-model", "responseId": "abc123"}
