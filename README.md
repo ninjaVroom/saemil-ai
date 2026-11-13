@@ -75,7 +75,7 @@ ruff check .
 mypy
 ```
 
-332 tests, 97% line coverage: gradient checks, XOR, engine save/load, each head, the AI bridge (with network access patched off and vendor adapters tested against fixtures), the studio routes including a live uvicorn server, and the JS/Python centering check (needs `node` on `PATH`). Warnings are treated as errors. CI runs the suite on Python 3.10 to 3.13 and runs ruff and mypy (`check_untyped_defs`) on every push.
+333 tests, 97% line coverage: gradient checks, XOR, engine save/load, each head, the AI bridge (with network access patched off and vendor adapters tested against fixtures), the studio routes including a live uvicorn server, and the JS/Python centering check (needs `node` on `PATH`). Warnings are treated as errors. CI runs the suite on Python 3.10 to 3.13 and runs ruff and mypy (`check_untyped_defs`) on every push.
 
 `python scripts/ui_walkthrough.py` runs a 58-check headless browser walkthrough and regenerates the screenshots. It needs Playwright for Python and Microsoft Edge, and it currently assumes a Windows `.venv` layout.
 

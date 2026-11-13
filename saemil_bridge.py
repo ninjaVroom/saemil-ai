@@ -315,7 +315,10 @@ def _child_env():
     return {k: v for k, v in os.environ.items() if not k.endswith("_API_KEY")}  # no silent paid-API use
 
 
-_NO_WINDOW = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+if sys.platform == "win32":
+    _NO_WINDOW = subprocess.CREATE_NO_WINDOW
+else:
+    _NO_WINDOW = 0
 
 
 def _kill_tree(proc):

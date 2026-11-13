@@ -57,6 +57,8 @@ def child(head, seed):
 
 
 def cpu_name():
+    if sys.platform != "win32":
+        return platform.processor() or "unknown"
     try:
         import winreg
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"HARDWARE\DESCRIPTION\System\CentralProcessor\0") as k:

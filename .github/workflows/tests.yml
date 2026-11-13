@@ -10,7 +10,8 @@ jobs:
           python-version: "3.13"
       - run: pip install -e ".[studio,dev]"
       - run: ruff check .
-      - run: mypy
+      - run: mypy --platform linux
+      - run: mypy --platform win32
 
   pytest:
     runs-on: ubuntu-latest
