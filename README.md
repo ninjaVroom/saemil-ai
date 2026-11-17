@@ -22,9 +22,9 @@ The checks cover numerical gradients, repeated embedding indices, model loading,
 
 This is a local demonstration. It has no authentication and is intended for loopback access. The tabular features describe finished sessions, and generated-name novelty is checked only against the source corpus. Dataset sources, recorded measurements and reproduction commands are included below and in the linked documentation.
 
-## Prototype
+## Figma design
 
-Figma prototype link pending.
+[View the Figma design](https://www.figma.com/design/b7VfoPB7QihNIqWMJUVi2v/SAEMIL).
 
 ## Results
 
